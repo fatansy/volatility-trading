@@ -526,12 +526,8 @@ class VolatilityEstimator(object):
 
         fig = plt.figure(figsize=(8, 6))
         
-        n, bins, patches = plt.hist(estimator, bins, normed=normed, facecolor='blue', alpha=0.25)
+        n, bins, patches = plt.hist(estimator, bins, facecolor='blue', alpha=0.25)
         
-        if normed:
-            y = mlab.normpdf(bins, mean, std)
-            plt.plot(bins, y, 'g--', linewidth=1)
-
         plt.axvline(last, 0, 1, linestyle='-', linewidth=1.5, color='r')
 
         plt.grid(True, axis='y', which='major', alpha=0.5)
@@ -716,18 +712,6 @@ class VolatilityEstimator(object):
         benchmark_corr_fig, benchmark_corr_plt = self.benchmark_correlation(window=window)
         benchmark_regression = self.benchmark_regression(window=window)
         
-        filename = self._symbol.upper() + '_termsheet_' + datetime.datetime.today().strftime("%Y%m%d") + '.pdf'
-        fn = os.path.abspath(os.path.join(u'..', u'term-sheets', filename))
-        pp = PdfPages(fn)
-        
-        pp.savefig(cones_fig)
-        pp.savefig(rolling_quantiles_fig)
-        pp.savefig(rolling_extremes_fig)
-        pp.savefig(rolling_descriptives_fig)
-        pp.savefig(histogram_fig)
-        pp.savefig(benchmark_compare_fig)
-        pp.savefig(benchmark_corr_fig)
-
         fig = plt.figure(figsize=(8, 6))
         ax = fig.add_subplot(111)
         ax.text(
@@ -739,7 +723,4 @@ class VolatilityEstimator(object):
 
         plt.axis('off')
         fig.tight_layout()
-        pp.savefig(fig)
-        pp.close()
         
-        print('%s output complete' % filename)
